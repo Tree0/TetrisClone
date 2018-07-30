@@ -1,5 +1,6 @@
 // Tetris game on console.
 
+
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -81,7 +82,7 @@ int main()
 	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
 	SetConsoleActiveScreenBuffer(hConsole);
 	DWORD dwBytesWritten = 0;
-
+	
 	tetromino[0].append(L"..X...X...X...X."); // Tetronimos 4x4
 	tetromino[1].append(L"..X..XX...X.....");
 	tetromino[2].append(L".....XX..XX.....");
@@ -120,12 +121,12 @@ int main()
 		// Input ========================
 		for (int k = 0; k < 4; k++)								// R   L   D Z
 			bKey[k] = (0x8000 & GetAsyncKeyState((unsigned char)("\x27\x25\x28Z"[k]))) != 0;
-
+		
 		// Game Logic ===================
 
 		// Handle player movement
 		nCurrentX += (bKey[0] && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX + 1, nCurrentY)) ? 1 : 0;
-		nCurrentX -= (bKey[1] && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX - 1, nCurrentY)) ? 1 : 0;
+		nCurrentX -= (bKey[1] && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX - 1, nCurrentY)) ? 1 : 0;		
 		nCurrentY += (bKey[2] && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY + 1)) ? 1 : 0;
 
 		// Rotate, but latch to stop wild spinning
@@ -145,7 +146,7 @@ int main()
 			nPieceCount++;
 			if (nPieceCount % 50 == 0)
 				if (nSpeed >= 10) nSpeed--;
-
+			
 			// Test if piece can be moved down
 			if (DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY + 1))
 				nCurrentY++; // It can, so do it!
@@ -159,7 +160,7 @@ int main()
 
 				// Check for lines
 				for (int py = 0; py < 4; py++)
-					if (nCurrentY + py < nFieldHeight - 1)
+					if(nCurrentY + py < nFieldHeight - 1)
 					{
 						bool bLine = true;
 						for (int px = 1; px < nFieldWidth - 1; px++)
@@ -171,11 +172,11 @@ int main()
 							for (int px = 1; px < nFieldWidth - 1; px++)
 								pField[(nCurrentY + py) * nFieldWidth + px] = 8;
 							vLines.push_back(nCurrentY + py);
-						}
+						}						
 					}
 
 				nScore += 25;
-				if (!vLines.empty())	nScore += (1 << vLines.size()) * 100;
+				if(!vLines.empty())	nScore += (1 << vLines.size()) * 100;
 
 				// Pick New Piece
 				nCurrentX = nFieldWidth / 2;
@@ -226,13 +227,9 @@ int main()
 		WriteConsoleOutputCharacter(hConsole, screen, nScreenWidth * nScreenHeight, { 0,0 }, &dwBytesWritten);
 	}
 
-
+	// Oh Dear
 	CloseHandle(hConsole);
 	cout << "Game Over!! Score:" << nScore << endl;
-	cin.get();
+	system("pause");
 	return 0;
 }
-
-
-
-
