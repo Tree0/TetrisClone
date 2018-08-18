@@ -1,5 +1,7 @@
-// Tetris game on console using C++.
+//Tetris game on console using C++.
 
-![]{tetris.png} 
+![](
+      TetrisClone/tetris.png
+    )
 
 
